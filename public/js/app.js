@@ -36216,8 +36216,12 @@ var Example = function (_Component) {
         var _this = _possibleConstructorReturn(this, (Example.__proto__ || Object.getPrototypeOf(Example)).call(this));
 
         _this.state = {
-            name: 'Mytour Home page',
-            products: []
+            header: 'Mytour Home',
+            products: [{
+                name: 'Phuong',
+                price: 1000,
+                quantity: 1
+            }]
         };
         _this.handleFormSubmit = _this.handleFormSubmit.bind(_this);
         return _this;
@@ -36249,18 +36253,18 @@ var Example = function (_Component) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'card-header' },
-                                this.state.name
+                                this.state.header
                             ),
                             _react2.default.createElement(
                                 'div',
                                 { className: 'card-body' },
-                                _react2.default.createElement(_AddProduct2.default, { handleFormSubmit: this.handleFormSubmit }),
-                                _react2.default.createElement('hr', null),
+                                _react2.default.createElement(_AddProduct2.default, { handleSubmit: this.handleFormSubmit }),
                                 _react2.default.createElement(
                                     'p',
                                     null,
                                     'The .table class adds basic styling (light padding and horizontal dividers) to a table:'
                                 ),
+                                _react2.default.createElement('hr', null),
                                 _react2.default.createElement(
                                     'table',
                                     { className: 'table' },
@@ -36272,17 +36276,22 @@ var Example = function (_Component) {
                                             null,
                                             _react2.default.createElement(
                                                 'th',
-                                                null,
+                                                { scope: 'col' },
+                                                '#'
+                                            ),
+                                            _react2.default.createElement(
+                                                'th',
+                                                { scope: 'col' },
                                                 'Name'
                                             ),
                                             _react2.default.createElement(
                                                 'th',
-                                                null,
+                                                { scope: 'col' },
                                                 'Price'
                                             ),
                                             _react2.default.createElement(
                                                 'th',
-                                                null,
+                                                { scope: 'col' },
                                                 'Quantity'
                                             ),
                                             _react2.default.createElement(
@@ -36299,15 +36308,6 @@ var Example = function (_Component) {
                                             if (product.edit) return _react2.default.createElement(_EditProduct2.default, { key: index, product: [product, index], saveProduct: _this2.saveProduct.bind(_this2), cancelProduct: _this2.cancelProduct.bind(_this2) });
                                             return _react2.default.createElement(_ProductItem2.default, { key: index, product: [product, index], removeProduct: _this2.removeProduct.bind(_this2), editProduct: _this2.editProduct.bind(_this2) });
                                         })
-                                    ),
-                                    _react2.default.createElement(
-                                        'tfoot',
-                                        null,
-                                        _react2.default.createElement(
-                                            'tr',
-                                            null,
-                                            _react2.default.createElement('td', { className: 'text-center', colSpan: '20' })
-                                        )
                                     )
                                 )
                             )
@@ -36319,6 +36319,7 @@ var Example = function (_Component) {
     }, {
         key: 'handleFormSubmit',
         value: function handleFormSubmit(newProduct) {
+            console.log(newProduct);
             this.setState(function (state) {
                 return {
                     products: [].concat(_toConsumableArray(state.products), [newProduct])
@@ -58216,31 +58217,32 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var AddProduct = function (_Component) {
     _inherits(AddProduct, _Component);
 
-    function AddProduct(props) {
+    function AddProduct() {
         _classCallCheck(this, AddProduct);
 
-        var _this = _possibleConstructorReturn(this, (AddProduct.__proto__ || Object.getPrototypeOf(AddProduct)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (AddProduct.__proto__ || Object.getPrototypeOf(AddProduct)).call(this));
 
         _this.state = {
             name: '',
             price: '',
             quantity: ''
         };
-        _this.handleFieldChange = _this.handleFieldChange.bind(_this);
-        _this.onSubmit = _this.onSubmit.bind(_this);
+        _this.handleChange = _this.handleChange.bind(_this);
+        // this.onSubmit = this.onSubmit.bind(this);
         return _this;
     }
 
     _createClass(AddProduct, [{
-        key: 'handleFieldChange',
-        value: function handleFieldChange(event) {
+        key: 'handleChange',
+        value: function handleChange(event) {
             this.setState(_defineProperty({}, event.target.name, event.target.value));
         }
     }, {
         key: 'onSubmit',
         value: function onSubmit(e) {
             e.preventDefault();
-            this.props.handleFormSubmit(this.state);
+            var newProduct = this.state;
+            this.props.handleSubmit(newProduct);
             this.setState({
                 name: '',
                 price: '',
@@ -58268,7 +58270,7 @@ var AddProduct = function (_Component) {
                             { className: 'sr-only', htmlFor: 'inlineFormInput' },
                             'Name'
                         ),
-                        _react2.default.createElement('input', { type: 'text', name: 'name', className: 'form-control mb-2', placeholder: 'Jane Doe', value: this.state.name, onChange: this.handleFieldChange })
+                        _react2.default.createElement('input', { type: 'text', name: 'name', className: 'form-control mb-2', placeholder: 'Jane Doe', value: this.state.name, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -58278,7 +58280,7 @@ var AddProduct = function (_Component) {
                             { className: 'sr-only', htmlFor: 'inlineFormInput' },
                             'Price'
                         ),
-                        _react2.default.createElement('input', { type: 'text', name: 'price', className: 'form-control mb-2', placeholder: 'Price', value: this.state.price, onChange: this.handleFieldChange })
+                        _react2.default.createElement('input', { type: 'text', name: 'price', className: 'form-control mb-2', placeholder: 'Price', value: this.state.price, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -58288,7 +58290,7 @@ var AddProduct = function (_Component) {
                             { className: 'sr-only', htmlFor: 'inlineFormInput' },
                             'Quantity'
                         ),
-                        _react2.default.createElement('input', { type: 'text', name: 'quantity', className: 'form-control mb-2', placeholder: 'Quantity', value: this.state.quantity, onChange: this.handleFieldChange })
+                        _react2.default.createElement('input', { type: 'text', name: 'quantity', className: 'form-control mb-2', placeholder: 'Quantity', value: this.state.quantity, onChange: this.handleChange })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -58342,7 +58344,7 @@ var ProductItem = function (_Component) {
     function ProductItem() {
         _classCallCheck(this, ProductItem);
 
-        return _possibleConstructorReturn(this, (ProductItem.__proto__ || Object.getPrototypeOf(ProductItem)).call(this));
+        return _possibleConstructorReturn(this, (ProductItem.__proto__ || Object.getPrototypeOf(ProductItem)).apply(this, arguments));
     }
 
     _createClass(ProductItem, [{
@@ -58378,7 +58380,7 @@ var ProductItem = function (_Component) {
                     _react2.default.createElement(
                         "a",
                         { href: "", className: "btn-link text-primary", onClick: function onClick(e) {
-                                return _this2.editProduct.call(_this2, e, index);
+                                return _this2.editProduct(e, index);
                             } },
                         "Edit"
                     ),
@@ -58386,7 +58388,7 @@ var ProductItem = function (_Component) {
                     _react2.default.createElement(
                         "a",
                         { href: "", className: "btn-link text-danger", onClick: function onClick(e) {
-                                return _this2.removeProduct.call(_this2, e, index);
+                                return _this2.removeProduct(e, index);
                             } },
                         "Remove"
                     )

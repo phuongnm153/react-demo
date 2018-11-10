@@ -21,8 +21,8 @@ export default class EditProduct extends Component {
                 <td><input type="text" name="name" className="form-control" value={this.state.price} onChange={::this.handleFieldChange}/></td>
                 <td><input type="text" name="name" className="form-control" value={this.state.quantity} onChange={::this.handleFieldChange}/></td>
                 <td>
-                    <a href="" className="btn btn-primary" onClick={(e) => ::this.saveProduct(e)}>Save</a>&nbsp;&nbsp;
-                    <a href="" className="btn btn-danger" onClick={(e) => ::this.cancelProduct(e)}>Cancel</a>
+                    <a href="" className="btn btn-primary" onClick={::this.saveProduct}>Save</a>&nbsp;&nbsp;
+                    <a href="" className="btn btn-danger" onClick={::this.cancelProduct}>Cancel</a>
                 </td>
             </tr>
         )

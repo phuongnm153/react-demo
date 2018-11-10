@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
 import AddProduct from './product/AddProduct';
 import ProductItem from './product/ProductItem';
 import EditProduct from './product/EditProduct';
@@ -9,16 +8,23 @@ export default class Example extends Component {
     constructor() {
         super();
         this.state = {
-            name : 'Mytour Home page',
-            products : []
+            header: 'Mytour Home',
+            products: [
+                {
+                    name: 'Phuong',
+                    price: 1000,
+                    quantity: 1
+                }
+            ]
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
-    componentWillMount(){
+    componentWillMount() {
 
     }
-    componentDidMount(){
+
+    componentDidMount() {
 
     }
 
@@ -28,18 +34,19 @@ export default class Example extends Component {
                 <div className="row justify-content-center">
                     <div className="col-md-10">
                         <div className="card">
-                            <div className="card-header">{this.state.name}</div>
+                            <div className="card-header">{this.state.header}</div>
 
                             <div className="card-body">
-                                <AddProduct handleFormSubmit={this.handleFormSubmit}/>
-                                <hr/>
+                                <AddProduct handleSubmit={this.handleFormSubmit}/>
                                 <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>
+                                <hr/>
                                 <table className="table">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Price</th>
-                                        <th>Quantity</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Quantity</th>
                                         <th>Action</th>
                                     </tr>
                                     </thead>
@@ -50,12 +57,6 @@ export default class Example extends Component {
                                         return <ProductItem key={index} product={[product, index]} removeProduct={::this.removeProduct} editProduct={::this.editProduct}/>
                                     })}
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td className="text-center" colSpan="20">
-                                            </td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -67,7 +68,7 @@ export default class Example extends Component {
 
     handleFormSubmit(newProduct) {
         this.setState(state => ({
-            products : [...state.products, newProduct]
+            products: [...state.products, newProduct]
         }));
     }
 
@@ -98,5 +99,5 @@ export default class Example extends Component {
 }
 
 if (document.getElementById('example')) {
-    ReactDOM.render(<Example />, document.getElementById('example'));
+    ReactDOM.render(<Example/>, document.getElementById('example'));
 }

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 export default class ProductItem extends Component {
-    constructor(){
-        super()
-    }
 
     render() {
         let [product, index] = [...this.props.product];
@@ -13,8 +10,8 @@ export default class ProductItem extends Component {
                 <td>{product.price}</td>
                 <td>{product.quantity}</td>
                 <td>
-                    <a href="" className="btn-link text-primary" onClick={(e) => ::this.editProduct(e, index)}>Edit</a>&nbsp;&nbsp;
-                    <a href="" className="btn-link text-danger" onClick={(e) => ::this.removeProduct(e, index)}>Remove</a>
+                    <a href="" className="btn-link text-primary" onClick={(e) => this.editProduct(e, index)}>Edit</a>&nbsp;&nbsp;
+                    <a href="" className="btn-link text-danger" onClick={(e) => this.removeProduct(e, index)}>Remove</a>
                 </td>
             </tr>
         )
