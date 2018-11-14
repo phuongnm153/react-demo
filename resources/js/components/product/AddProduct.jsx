@@ -20,7 +20,7 @@ export default class AddProduct extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.handleFormSubmit(this.state);
+        this.props.handleSubmit(this.state);
         this.setState({
             name: '',
             price: '',

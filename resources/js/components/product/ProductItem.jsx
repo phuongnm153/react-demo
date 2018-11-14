@@ -6,6 +6,7 @@ export default class ProductItem extends Component {
         let [product, index] = [...this.props.product];
         return (
             <tr>
+                <td>{index + 1}</td>
                 <td>{product.name}</td>
                 <td>{product.price}</td>
                 <td>{product.quantity}</td>
@@ -19,7 +20,7 @@ export default class ProductItem extends Component {
 
     editProduct(e, index) {
         e.preventDefault();
-        this.props.editProduct(e, index);
+        this.props.editProductParent(e, index);
     }
 
     removeProduct(e, index) {

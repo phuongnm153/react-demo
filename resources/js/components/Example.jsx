@@ -13,7 +13,8 @@ export default class Example extends Component {
                 {
                     name: 'Phuong',
                     price: 1000,
-                    quantity: 1
+                    quantity: 1,
+                    edit: false
                 }
             ]
         };
@@ -54,7 +55,7 @@ export default class Example extends Component {
                                     {this.state.products.map((product, index) => {
                                         if (product.edit)
                                             return <EditProduct key={index} product={[product, index]} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
-                                        return <ProductItem key={index} product={[product, index]} removeProduct={::this.removeProduct} editProduct={::this.editProduct}/>
+                                        return <ProductItem key={index} product={[product, index]} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
                                     })}
                                     </tbody>
                                 </table>
@@ -72,15 +73,15 @@ export default class Example extends Component {
         }));
     }
 
-    editProduct(e, index) {
+    editProductView(e, index) {
         let array = [...this.state.products]; // make a separate copy of the array
         array[index] = {...array[index], edit: true};
         this.setState({products: array});
     }
 
-    saveProduct(e, index) {
+    saveProduct(updatedProduct, index) {
         let array = [...this.state.products]; // make a separate copy of the array
-        array[index] = e;
+        array[index] = updatedProduct;
         this.setState({products: array});
     }
 

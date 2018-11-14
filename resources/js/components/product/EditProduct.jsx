@@ -17,6 +17,7 @@ export default class EditProduct extends Component {
 
         return (
             <tr>
+                <td>{this.state.index}</td>
                 <td><input type="text" name="name" className="form-control" value={this.state.name} onChange={::this.handleFieldChange}/></td>
                 <td><input type="text" name="name" className="form-control" value={this.state.price} onChange={::this.handleFieldChange}/></td>
                 <td><input type="text" name="name" className="form-control" value={this.state.quantity} onChange={::this.handleFieldChange}/></td>
