@@ -106,7 +106,6 @@ export default class Example extends Component {
         })
         .then(response => {
             // handle success
-            console.log(response.data);
             this.setState({
                 products: response.data
             });

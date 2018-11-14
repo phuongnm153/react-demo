@@ -6,10 +6,10 @@ export default class ProductItem extends Component {
         let [product, index] = [...this.props.product];
         return (
             <tr>
-                <td>{index + 1}</td>
+                <td>{product.id}</td>
                 <td>{product.name}</td>
-                <td>{product.price}</td>
-                <td>{product.quantity}</td>
+                <td className={"text-right"}>{product.price}</td>
+                <td className={"text-right"}>{product.quantity}</td>
                 <td>
                     <a href="" className="btn-link text-primary" onClick={(e) => this.editProduct(e, index)}>Edit</a>&nbsp;&nbsp;
                     <a href="" className="btn-link text-danger" onClick={(e) => this.removeProduct(e, index)}>Remove</a>

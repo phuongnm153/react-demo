@@ -36365,7 +36365,6 @@ var Example = function (_Component) {
                 }
             }).then(function (response) {
                 // handle success
-                console.log(response.data);
                 _this3.setState({
                     products: response.data
                 });
@@ -58420,7 +58419,7 @@ var ProductItem = function (_Component) {
                 _react2.default.createElement(
                     "td",
                     null,
-                    index + 1
+                    product.id
                 ),
                 _react2.default.createElement(
                     "td",
@@ -58429,12 +58428,12 @@ var ProductItem = function (_Component) {
                 ),
                 _react2.default.createElement(
                     "td",
-                    null,
+                    { className: "text-right" },
                     product.price
                 ),
                 _react2.default.createElement(
                     "td",
-                    null,
+                    { className: "text-right" },
                     product.quantity
                 ),
                 _react2.default.createElement(
