@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import ReactPaginate from 'react-paginate';
+
 import AddProduct from './product/AddProduct';
 import ProductItem from './product/ProductItem';
 import EditProduct from './product/EditProduct';
@@ -9,20 +11,18 @@ export default class Example extends Component {
         super();
         this.state = {
             header: 'Mytour Home',
-            products: [
-                {
-                    name: 'Phuong',
-                    price: 1000,
-                    quantity: 1,
-                    edit: false
-                }
-            ]
+            search: '',
+            page: 1,
+            products: {
+                last_page: 1,
+                data: []
+            }
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
 
     componentWillMount() {
-
+        this.getProducts();
     }
 
     componentDidMount() {
@@ -39,7 +39,6 @@ export default class Example extends Component {
 
                             <div className="card-body">
                                 <AddProduct handleSubmit={this.handleFormSubmit}/>
-                                <p>The .table class adds basic styling (light padding and horizontal dividers) to a table:</p>
                                 <hr/>
                                 <table className="table">
                                     <thead>
@@ -52,12 +51,35 @@ export default class Example extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {this.state.products.map((product, index) => {
+                                    {this.state.products.data.map((product, index) => {
                                         if (product.edit)
-                                            return <EditProduct key={index} product={[product, index]} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
-                                        return <ProductItem key={index} product={[product, index]} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
+                                            return <EditProduct key={product.id} product={[product, product.id]} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
+                                        return <ProductItem key={product.id} product={[product, product.id]} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
                                     })}
                                     </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan='20'>
+                                                <ReactPaginate
+                                                    pageCount={this.state.products.last_page}
+                                                    marginPagesDisplayed={2}
+                                                    pageRangeDisplayed={5}
+                                                    previousLabel={"Previous"}
+                                                    nextLabel={"Next"}
+                                                    previousClassName={"page-item"}
+                                                    nextClassName={"page-item"}
+                                                    previousLinkClassName={"page-link"}
+                                                    nextLinkClassName={"page-link"}
+                                                    breakLabel={"..."}
+                                                    breakClassName={"page-link"}
+                                                    onPageChange={this.handlePageClick}
+                                                    containerClassName={"pagination justify-content-center"}
+                                                    pageClassName={"page-item"}
+                                                    pageLinkClassName={"page-link"}
+                                                    activeClassName={"active"}/>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -65,6 +87,37 @@ export default class Example extends Component {
                 </div>
             </div>
         );
+    }
+
+    handlePageClick = (data) => {
+        let selected = data.selected + 1;
+
+        this.setState({page: selected}, () => {
+            this.getProducts()
+        });
+    };
+
+    getProducts() {
+        axios.get(api_version + 'products', {
+            params: {
+                search: this.state.search,
+                page: this.state.page
+            }
+        })
+        .then(response => {
+            // handle success
+            console.log(response.data);
+            this.setState({
+                products: response.data
+            });
+        })
+        .catch( error => {
+            // handle error
+            console.log(error);
+        })
+        .then(() => {
+            // always executed
+        });
     }
 
     handleFormSubmit(newProduct) {
