@@ -19,6 +19,8 @@ Install `npm`:
 ```
 $ npm install
 ```
+Rename file `.env.example` to `.env`
+
 Install `migration`:
 ```
 $ php artisan migrate
