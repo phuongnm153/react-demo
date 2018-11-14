@@ -36171,8 +36171,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(1);
@@ -36229,10 +36227,8 @@ var Example = function (_Component) {
             header: 'Mytour Home',
             search: '',
             page: 1,
-            products: {
-                last_page: 1,
-                data: []
-            }
+            last_page: 1,
+            products: []
         };
         _this.handleFormSubmit = _this.handleFormSubmit.bind(_this);
         return _this;
@@ -36312,9 +36308,9 @@ var Example = function (_Component) {
                                     _react2.default.createElement(
                                         'tbody',
                                         null,
-                                        this.state.products.data.map(function (product, index) {
-                                            if (product.edit) return _react2.default.createElement(_EditProduct2.default, { key: product.id, product: [product, product.id], saveProduct: _this2.saveProduct.bind(_this2), cancelProduct: _this2.cancelProduct.bind(_this2) });
-                                            return _react2.default.createElement(_ProductItem2.default, { key: product.id, product: [product, product.id], removeProduct: _this2.removeProduct.bind(_this2), editProductParent: _this2.editProductView.bind(_this2) });
+                                        this.state.products.map(function (product) {
+                                            if (product.edit) return _react2.default.createElement(_EditProduct2.default, { key: product.id, product: product, saveProduct: _this2.saveProduct.bind(_this2), cancelProduct: _this2.cancelProduct.bind(_this2) });
+                                            return _react2.default.createElement(_ProductItem2.default, { key: product.id, product: product, removeProduct: _this2.removeProduct.bind(_this2), editProductParent: _this2.editProductView.bind(_this2) });
                                         })
                                     ),
                                     _react2.default.createElement(
@@ -36327,7 +36323,7 @@ var Example = function (_Component) {
                                                 'td',
                                                 { colSpan: '20' },
                                                 _react2.default.createElement(_reactPaginate2.default, {
-                                                    pageCount: this.state.products.last_page,
+                                                    pageCount: this.state.last_page,
                                                     marginPagesDisplayed: 2,
                                                     pageRangeDisplayed: 5,
                                                     previousLabel: "Previous",
@@ -36366,7 +36362,8 @@ var Example = function (_Component) {
             }).then(function (response) {
                 // handle success
                 _this3.setState({
-                    products: response.data
+                    last_page: response.data.last_page,
+                    products: response.data.data
                 });
             }).catch(function (error) {
                 // handle error
@@ -36386,30 +36383,34 @@ var Example = function (_Component) {
         }
     }, {
         key: 'editProductView',
-        value: function editProductView(e, index) {
+        value: function editProductView(id) {
             var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
-            array[index] = _extends({}, array[index], { edit: true });
+            var index = _.findIndex(array, { 'id': id });
+            array[index].edit = true;
             this.setState({ products: array });
         }
     }, {
         key: 'saveProduct',
-        value: function saveProduct(updatedProduct, index) {
+        value: function saveProduct(updatedProduct) {
             var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
+            var index = _.findIndex(array, { 'id': id });
             array[index] = updatedProduct;
             this.setState({ products: array });
         }
     }, {
         key: 'cancelProduct',
-        value: function cancelProduct(e, index) {
+        value: function cancelProduct(id) {
             var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
-            // array[index].edit = false;
-            array[index] = _extends({}, array[index], { edit: false });
+            var index = _.findIndex(array, { 'id': id });
+            console.log(id, index, array);
+            array[index].edit = false;
             this.setState({ products: array });
         }
     }, {
         key: 'removeProduct',
-        value: function removeProduct(e, index) {
+        value: function removeProduct(id) {
             var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
+            var index = _.findIndex(array, { 'id': id });
             array.splice(index, 1);
             this.setState({ products: array });
         }
@@ -58387,8 +58388,6 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -58398,60 +58397,53 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var ProductItem = function (_Component) {
     _inherits(ProductItem, _Component);
 
-    function ProductItem() {
+    function ProductItem(props) {
         _classCallCheck(this, ProductItem);
 
-        return _possibleConstructorReturn(this, (ProductItem.__proto__ || Object.getPrototypeOf(ProductItem)).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, (ProductItem.__proto__ || Object.getPrototypeOf(ProductItem)).call(this, props));
+
+        _this.state = _this.props.product;
+        return _this;
     }
 
     _createClass(ProductItem, [{
         key: "render",
         value: function render() {
-            var _this2 = this;
-
-            var _ref = [].concat(_toConsumableArray(this.props.product)),
-                product = _ref[0],
-                index = _ref[1];
-
             return _react2.default.createElement(
                 "tr",
                 null,
                 _react2.default.createElement(
                     "td",
                     null,
-                    product.id
+                    this.state.id
                 ),
                 _react2.default.createElement(
                     "td",
                     null,
-                    product.name
+                    this.state.name
                 ),
                 _react2.default.createElement(
                     "td",
                     { className: "text-right" },
-                    product.price
+                    this.state.price
                 ),
                 _react2.default.createElement(
                     "td",
                     { className: "text-right" },
-                    product.quantity
+                    this.state.quantity
                 ),
                 _react2.default.createElement(
                     "td",
                     null,
                     _react2.default.createElement(
                         "a",
-                        { href: "", className: "btn-link text-primary", onClick: function onClick(e) {
-                                return _this2.editProduct(e, index);
-                            } },
+                        { href: "", className: "btn-link text-primary", onClick: this.editProduct.bind(this) },
                         "Edit"
                     ),
                     "\xA0\xA0",
                     _react2.default.createElement(
                         "a",
-                        { href: "", className: "btn-link text-danger", onClick: function onClick(e) {
-                                return _this2.removeProduct(e, index);
-                            } },
+                        { href: "", className: "btn-link text-danger", onClick: this.removeProduct.bind(this) },
                         "Remove"
                     )
                 )
@@ -58459,15 +58451,15 @@ var ProductItem = function (_Component) {
         }
     }, {
         key: "editProduct",
-        value: function editProduct(e, index) {
+        value: function editProduct(e) {
             e.preventDefault();
-            this.props.editProductParent(e, index);
+            this.props.editProductParent(this.state.id);
         }
     }, {
         key: "removeProduct",
-        value: function removeProduct(e, index) {
+        value: function removeProduct(e) {
             e.preventDefault();
-            this.props.removeProduct(e, index);
+            this.props.removeProduct(this.state.id);
         }
     }]);
 
@@ -58487,8 +58479,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(1);
@@ -58498,8 +58488,6 @@ var _react2 = _interopRequireDefault(_react);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -58515,11 +58503,7 @@ var EditProduct = function (_Component) {
 
         var _this = _possibleConstructorReturn(this, (EditProduct.__proto__ || Object.getPrototypeOf(EditProduct)).call(this, props));
 
-        var _ref = [].concat(_toConsumableArray(_this.props.product)),
-            product = _ref[0],
-            index = _ref[1];
-
-        _this.state = _extends({}, product, { index: index });
+        _this.state = _this.props.product;
         return _this;
     }
 
@@ -58538,7 +58522,7 @@ var EditProduct = function (_Component) {
                 _react2.default.createElement(
                     "td",
                     null,
-                    this.state.index
+                    this.state.id
                 ),
                 _react2.default.createElement(
                     "td",
@@ -58581,14 +58565,14 @@ var EditProduct = function (_Component) {
             this.setState({
                 edit: false
             }, function () {
-                _this2.props.saveProduct(_this2.state, _this2.state.index);
+                _this2.props.saveProduct(_this2.state);
             });
         }
     }, {
         key: "cancelProduct",
         value: function cancelProduct(e) {
             e.preventDefault();
-            this.props.cancelProduct(this.state, this.state.index);
+            this.props.cancelProduct(this.state.id);
         }
     }]);
 

@@ -3,8 +3,7 @@ import React, {Component} from 'react';
 export default class EditProduct extends Component {
     constructor(props) {
         super(props);
-        let [product, index] = [...this.props.product];
-        this.state = {...product, index : index};
+        this.state = this.props.product;
     }
 
     handleFieldChange (event) {
@@ -17,7 +16,7 @@ export default class EditProduct extends Component {
 
         return (
             <tr>
-                <td>{this.state.index}</td>
+                <td>{this.state.id}</td>
                 <td><input type="text" name="name" className="form-control" value={this.state.name} onChange={::this.handleFieldChange}/></td>
                 <td><input type="text" name="name" className="form-control" value={this.state.price} onChange={::this.handleFieldChange}/></td>
                 <td><input type="text" name="name" className="form-control" value={this.state.quantity} onChange={::this.handleFieldChange}/></td>
@@ -34,12 +33,12 @@ export default class EditProduct extends Component {
         this.setState({
             edit: false
         }, () => {
-            this.props.saveProduct(this.state, this.state.index);
+            this.props.saveProduct(this.state);
         });
     }
 
     cancelProduct(e) {
         e.preventDefault();
-        this.props.cancelProduct(this.state, this.state.index);
+        this.props.cancelProduct(this.state.id);
     }
 }

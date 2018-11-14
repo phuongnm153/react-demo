@@ -2,29 +2,33 @@ import React, { Component } from 'react';
 
 export default class ProductItem extends Component {
 
+    constructor(props){
+        super(props);
+        this.state = this.props.product
+    }
+
     render() {
-        let [product, index] = [...this.props.product];
         return (
             <tr>
-                <td>{product.id}</td>
-                <td>{product.name}</td>
-                <td className={"text-right"}>{product.price}</td>
-                <td className={"text-right"}>{product.quantity}</td>
+                <td>{this.state.id}</td>
+                <td>{this.state.name}</td>
+                <td className={"text-right"}>{this.state.price}</td>
+                <td className={"text-right"}>{this.state.quantity}</td>
                 <td>
-                    <a href="" className="btn-link text-primary" onClick={(e) => this.editProduct(e, index)}>Edit</a>&nbsp;&nbsp;
-                    <a href="" className="btn-link text-danger" onClick={(e) => this.removeProduct(e, index)}>Remove</a>
+                    <a href="" className="btn-link text-primary" onClick={::this.editProduct}>Edit</a>&nbsp;&nbsp;
+                    <a href="" className="btn-link text-danger" onClick={::this.removeProduct}>Remove</a>
                 </td>
             </tr>
         )
     }
 
-    editProduct(e, index) {
+    editProduct(e) {
         e.preventDefault();
-        this.props.editProductParent(e, index);
+        this.props.editProductParent(this.state.id);
     }
 
-    removeProduct(e, index) {
+    removeProduct(e) {
         e.preventDefault();
-        this.props.removeProduct(e, index);
+        this.props.removeProduct(this.state.id);
     }
 }

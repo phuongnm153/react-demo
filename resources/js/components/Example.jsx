@@ -13,10 +13,8 @@ export default class Example extends Component {
             header: 'Mytour Home',
             search: '',
             page: 1,
-            products: {
-                last_page: 1,
-                data: []
-            }
+            last_page: 1,
+            products: []
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
@@ -51,17 +49,17 @@ export default class Example extends Component {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {this.state.products.data.map((product, index) => {
+                                    {this.state.products.map((product) => {
                                         if (product.edit)
-                                            return <EditProduct key={product.id} product={[product, product.id]} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
-                                        return <ProductItem key={product.id} product={[product, product.id]} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
+                                            return <EditProduct key={product.id} product={product} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
+                                        return <ProductItem key={product.id} product={product} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
                                     })}
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <td colSpan='20'>
                                                 <ReactPaginate
-                                                    pageCount={this.state.products.last_page}
+                                                    pageCount={this.state.last_page}
                                                     marginPagesDisplayed={2}
                                                     pageRangeDisplayed={5}
                                                     previousLabel={"Previous"}
@@ -107,7 +105,8 @@ export default class Example extends Component {
         .then(response => {
             // handle success
             this.setState({
-                products: response.data
+                last_page: response.data.last_page,
+                products: response.data.data
             });
         })
         .catch( error => {
@@ -125,27 +124,31 @@ export default class Example extends Component {
         }));
     }
 
-    editProductView(e, index) {
+    editProductView(id) {
         let array = [...this.state.products]; // make a separate copy of the array
-        array[index] = {...array[index], edit: true};
+        let index = _.findIndex(array, {'id': id});
+        array[index].edit = true;
         this.setState({products: array});
     }
 
-    saveProduct(updatedProduct, index) {
+    saveProduct(updatedProduct) {
         let array = [...this.state.products]; // make a separate copy of the array
+        let index = _.findIndex(array, {'id': id});
         array[index] = updatedProduct;
         this.setState({products: array});
     }
 
-    cancelProduct(e, index) {
+    cancelProduct(id) {
         let array = [...this.state.products]; // make a separate copy of the array
-        // array[index].edit = false;
-        array[index] = {...array[index], edit: false};
+        let index = _.findIndex(array, {'id': id});
+        console.log(id, index, array);
+        array[index].edit = false;
         this.setState({products: array});
     }
 
-    removeProduct(e, index) {
+    removeProduct(id) {
         let array = [...this.state.products]; // make a separate copy of the array
+        let index = _.findIndex(array, {'id': id});
         array.splice(index, 1);
         this.setState({products: array});
     }
