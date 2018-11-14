@@ -36281,7 +36281,7 @@ var Example = function (_Component) {
                                             _react2.default.createElement(
                                                 'th',
                                                 { scope: 'col' },
-                                                '#'
+                                                'ID'
                                             ),
                                             _react2.default.createElement(
                                                 'th',
