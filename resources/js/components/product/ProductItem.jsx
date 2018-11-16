@@ -24,7 +24,8 @@ export default class ProductItem extends Component {
 
     editProduct(e) {
         e.preventDefault();
-        this.props.editProductParent(this.state.id);
+        this.props.dispatch({ type: 'EDIT', id: this.state.id });
+        // this.props.editProductParent(this.state.id);
     }
 
     removeProduct(e) {

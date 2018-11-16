@@ -6,7 +6,19 @@ import AddProduct from './product/AddProduct';
 import ProductItem from './product/ProductItem';
 import EditProduct from './product/EditProduct';
 
-export default class Example extends Component {
+import { createStore, combineReducers, applyMiddleware } from 'redux'
+import ReduxThunk from 'redux-thunk'
+import { connect, Provider } from 'react-redux';
+
+import productReducer from '../reducers/products';
+
+const reducer = combineReducers({
+    products: productReducer
+});
+
+const store = createStore(reducer, applyMiddleware(ReduxThunk));
+
+class Example extends Component {
     constructor() {
         super();
         this.state = {
@@ -14,7 +26,8 @@ export default class Example extends Component {
             search: '',
             page: 1,
             last_page: 1,
-            products: []
+            products: [],
+            loading: true
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
     }
@@ -38,47 +51,50 @@ export default class Example extends Component {
                             <div className="card-body">
                                 <AddProduct handleSubmit={this.handleFormSubmit}/>
                                 <hr/>
-                                <table className="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th>Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {this.state.products.map((product) => {
-                                        if (product.edit)
-                                            return <EditProduct key={product.id} product={product} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
-                                        return <ProductItem key={product.id} product={product} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
-                                    })}
-                                    </tbody>
-                                    <tfoot>
+                                <div className="table-responsive">
+                                    <div className="table-processing" style={{display : this.state.loading ? 'block' : 'none'}}>Loading...</div>
+                                    <table className="table">
+                                        <thead>
                                         <tr>
-                                            <td colSpan='20'>
-                                                <ReactPaginate
-                                                    pageCount={this.state.last_page}
-                                                    marginPagesDisplayed={2}
-                                                    pageRangeDisplayed={5}
-                                                    previousLabel={"Previous"}
-                                                    nextLabel={"Next"}
-                                                    previousClassName={"page-item"}
-                                                    nextClassName={"page-item"}
-                                                    previousLinkClassName={"page-link"}
-                                                    nextLinkClassName={"page-link"}
-                                                    breakLabel={"..."}
-                                                    breakClassName={"page-link"}
-                                                    onPageChange={this.handlePageClick}
-                                                    containerClassName={"pagination justify-content-center"}
-                                                    pageClassName={"page-item"}
-                                                    pageLinkClassName={"page-link"}
-                                                    activeClassName={"active"}/>
-                                            </td>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th>Action</th>
                                         </tr>
-                                    </tfoot>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                        {this.state.products.map((product) => {
+                                            if (product.edit)
+                                                return <EditProduct key={product.id} product={product} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
+                                            return <ProductItem key={product.id} product={product} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
+                                        })}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colSpan='20'>
+                                                    <ReactPaginate
+                                                        pageCount={this.state.last_page}
+                                                        marginPagesDisplayed={2}
+                                                        pageRangeDisplayed={5}
+                                                        previousLabel={"Previous"}
+                                                        nextLabel={"Next"}
+                                                        previousClassName={"page-item"}
+                                                        nextClassName={"page-item"}
+                                                        previousLinkClassName={"page-link"}
+                                                        nextLinkClassName={"page-link"}
+                                                        breakLabel={"..."}
+                                                        breakClassName={"page-link"}
+                                                        onPageChange={this.handlePageClick}
+                                                        containerClassName={"pagination justify-content-center"}
+                                                        pageClassName={"page-item"}
+                                                        pageLinkClassName={"page-link"}
+                                                        activeClassName={"active"}/>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -96,6 +112,9 @@ export default class Example extends Component {
     };
 
     getProducts() {
+        this.setState({
+            loading: true
+        });
         axios.get(api_version + 'products', {
             params: {
                 search: this.state.search,
@@ -115,6 +134,10 @@ export default class Example extends Component {
         })
         .then(() => {
             // always executed
+            console.log('a');
+            this.setState({
+                loading: false
+            });
         });
     }
 
@@ -141,19 +164,28 @@ export default class Example extends Component {
     cancelProduct(id) {
         let array = [...this.state.products]; // make a separate copy of the array
         let index = _.findIndex(array, {'id': id});
-        console.log(id, index, array);
         array[index].edit = false;
         this.setState({products: array});
     }
 
     removeProduct(id) {
         let array = [...this.state.products]; // make a separate copy of the array
-        let index = _.findIndex(array, {'id': id});
-        array.splice(index, 1);
+        array = array.filter((pro) => pro.id !== id);
+        // let index = _.findIndex(array, {'id': id});
+        // array.splice(index, 1);
         this.setState({products: array});
     }
 }
 
+const mapStateToProps = (state) => ({
+    products: state.products,
+});
+
+export default connect(mapStateToProps)(Example);
+
 if (document.getElementById('example')) {
-    ReactDOM.render(<Example/>, document.getElementById('example'));
+    ReactDOM.render(
+        <Provider store={store}>
+            <Example />
+        </Provider>, document.getElementById('example'));
 }
