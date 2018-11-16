@@ -61995,13 +61995,7 @@ var productReducer = function productReducer() {
 
     switch (action.type) {
         case 'ADD':
-            var index = state.findIndex(function (obj) {
-                return obj.id === action.data.id;
-            });
-            if (index === -1) {
-                return [].concat(_toConsumableArray(state), [action.data]);
-            }
-            return state;
+            return [].concat(_toConsumableArray(state), [action.data]);
         case 'DELETE':
             return state.filter(function (obj) {
                 return obj.id !== action.id;
@@ -62018,7 +62012,6 @@ var productReducer = function productReducer() {
                     obj.quantity = !action.data.quantity;
                     return obj;
                 }
-
                 return obj;
             });
 

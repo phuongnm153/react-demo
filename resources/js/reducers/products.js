@@ -1,11 +1,7 @@
 const productReducer = (state = [], action) => {
     switch (action.type) {
         case 'ADD':
-            let index = state.findIndex(obj => obj.id === action.data.id);
-            if (index === -1) {
-                return [...state, action.data]
-            }
-            return state;
+            return [...state, action.data];
         case 'DELETE':
             return state.filter((obj) => obj.id !== action.id);
         case 'EDIT':
@@ -18,7 +14,6 @@ const productReducer = (state = [], action) => {
                     obj.quantity = !action.data.quantity;
                     return obj;
                 }
-
                 return obj;
             });
 
