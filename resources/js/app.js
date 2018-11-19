@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes React and other helpers. It's a great starting point while
@@ -13,5 +12,15 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/Example');
+import React from "react"
+import ReactDOM from "react-dom";
+import { Provider } from 'react-redux'
+import store from './store'
+import Example from './components/Example'
 
+if (document.getElementById('example')) {
+    ReactDOM.render(
+        <Provider store={store}>
+            <Example />
+        </Provider>, document.getElementById('example'));
+}

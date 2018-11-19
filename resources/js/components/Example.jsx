@@ -1,26 +1,18 @@
 import React, {Component} from 'react';
-import ReactDOM from 'react-dom';
+
 import ReactPaginate from 'react-paginate';
 
 import AddProduct from './product/AddProduct';
 import ProductItem from './product/ProductItem';
 import EditProduct from './product/EditProduct';
 
-import { createStore, combineReducers, applyMiddleware } from 'redux'
-import ReduxThunk from 'redux-thunk'
-import { connect, Provider } from 'react-redux';
-
-import productReducer from '../reducers/products';
-
-const reducer = combineReducers({
-    products: productReducer
-});
-
-const store = createStore(reducer, applyMiddleware(ReduxThunk));
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import * as actions from '../actions';
 
 class Example extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             header: 'Mytour Home',
             search: '',
@@ -30,14 +22,15 @@ class Example extends Component {
             loading: true
         };
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
+        this.removeProduct = this.removeProduct.bind(this);
     }
 
     componentWillMount() {
-        this.getProducts();
+
     }
 
     componentDidMount() {
-
+        this.getProducts();
     }
 
     render() {
@@ -64,7 +57,7 @@ class Example extends Component {
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {this.state.products.map((product) => {
+                                        {this.props.products.map((product) => {
                                             if (product.edit)
                                                 return <EditProduct key={product.id} product={product} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
                                             return <ProductItem key={product.id} product={product} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
@@ -125,8 +118,9 @@ class Example extends Component {
             // handle success
             this.setState({
                 last_page: response.data.last_page,
-                products: response.data.data
+                // products: response.data.data
             });
+            this.props.listingProduct({products: response.data.data});
         })
         .catch( error => {
             // handle error
@@ -134,7 +128,6 @@ class Example extends Component {
         })
         .then(() => {
             // always executed
-            console.log('a');
             this.setState({
                 loading: false
             });
@@ -169,23 +162,23 @@ class Example extends Component {
     }
 
     removeProduct(id) {
-        let array = [...this.state.products]; // make a separate copy of the array
-        array = array.filter((pro) => pro.id !== id);
-        // let index = _.findIndex(array, {'id': id});
-        // array.splice(index, 1);
-        this.setState({products: array});
+
+        this.props.deleteProduct(id);
+        // let array = [...this.state.products]; // make a separate copy of the array
+        // array = array.filter((pro) => pro.id !== id);
+        // // let index = _.findIndex(array, {'id': id});
+        // // array.splice(index, 1);
+        // this.setState({products: array});
     }
 }
 
 const mapStateToProps = (state) => ({
-    products: state.products,
+    products: state.productReducer.products,
 });
 
-export default connect(mapStateToProps)(Example);
 
-if (document.getElementById('example')) {
-    ReactDOM.render(
-        <Provider store={store}>
-            <Example />
-        </Provider>, document.getElementById('example'));
-}
+const mapDispatchToProps = dispatch => (
+    bindActionCreators(actions, dispatch)
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Example);
