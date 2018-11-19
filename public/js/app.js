@@ -60560,7 +60560,6 @@ var AddProduct = function (_Component) {
             quantity: ''
         };
         _this.handleChange = _this.handleChange.bind(_this);
-        // this.onSubmit = this.onSubmit.bind(this);
         return _this;
     }
 
@@ -60589,13 +60588,9 @@ var AddProduct = function (_Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
-
             return _react2.default.createElement(
                 'form',
-                { onSubmit: function onSubmit(e) {
-                        return _this3.onSubmit(e);
-                    } },
+                { onSubmit: this.onSubmit.bind(this) },
                 _react2.default.createElement(
                     'div',
                     { className: 'form-row align-items-center' },
@@ -60715,14 +60710,14 @@ var ProductItem = function (_Component) {
                     "td",
                     null,
                     _react2.default.createElement(
-                        "button",
-                        { className: "btn btn-link text-primary", onClick: this.editProduct.bind(this) },
+                        "a",
+                        { href: "", className: "btn btn-link text-primary", onClick: this.editProduct.bind(this) },
                         "Edit"
                     ),
                     "\xA0\xA0",
                     _react2.default.createElement(
-                        "button",
-                        { className: "btn btn-link text-danger", onClick: this.removeProduct.bind(this) },
+                        "a",
+                        { href: "", className: "btn btn-link text-danger", onClick: this.removeProduct.bind(this) },
                         "Remove"
                     )
                 )
@@ -60730,12 +60725,14 @@ var ProductItem = function (_Component) {
         }
     }, {
         key: "editProduct",
-        value: function editProduct() {
+        value: function editProduct(e) {
+            e.preventDefault();
             this.props.dispatch.editProduct(this.state.id);
         }
     }, {
         key: "removeProduct",
-        value: function removeProduct() {
+        value: function removeProduct(e) {
+            e.preventDefault();
             this.props.dispatch.deleteProduct(this.state.id);
         }
     }]);
