@@ -21,8 +21,6 @@ class Example extends Component {
             products: [],
             loading: true
         };
-        this.handleFormSubmit = this.handleFormSubmit.bind(this);
-        this.removeProduct = this.removeProduct.bind(this);
     }
 
     componentWillMount() {
@@ -42,7 +40,7 @@ class Example extends Component {
                             <div className="card-header">{this.state.header}</div>
 
                             <div className="card-body">
-                                <AddProduct handleSubmit={this.handleFormSubmit}/>
+                                <AddProduct dispatch={this.props}/>
                                 <hr/>
                                 <div className="table-responsive">
                                     <div className="table-processing" style={{display : this.state.loading ? 'block' : 'none'}}>Loading...</div>
@@ -59,8 +57,8 @@ class Example extends Component {
                                         <tbody>
                                         {this.props.products.map((product) => {
                                             if (product.edit)
-                                                return <EditProduct key={product.id} product={product} saveProduct={::this.saveProduct} cancelProduct={::this.cancelProduct}/>;
-                                            return <ProductItem key={product.id} product={product} removeProduct={::this.removeProduct} editProductParent={::this.editProductView}/>
+                                                return <EditProduct key={product.id} product={product} dispatch={this.props}/>;
+                                            return <ProductItem key={product.id} product={product} dispatch={this.props}/>
                                         })}
                                         </tbody>
                                         <tfoot>
@@ -120,7 +118,7 @@ class Example extends Component {
                 last_page: response.data.last_page,
                 // products: response.data.data
             });
-            this.props.listingProduct({products: response.data.data});
+            this.props.listingProduct(response.data.data);
         })
         .catch( error => {
             // handle error
@@ -133,49 +131,11 @@ class Example extends Component {
             });
         });
     }
-
-    handleFormSubmit(newProduct) {
-        this.setState(state => ({
-            products: [...state.products, newProduct]
-        }));
-    }
-
-    editProductView(id) {
-        let array = [...this.state.products]; // make a separate copy of the array
-        let index = _.findIndex(array, {'id': id});
-        array[index].edit = true;
-        this.setState({products: array});
-    }
-
-    saveProduct(updatedProduct) {
-        let array = [...this.state.products]; // make a separate copy of the array
-        let index = _.findIndex(array, {'id': id});
-        array[index] = updatedProduct;
-        this.setState({products: array});
-    }
-
-    cancelProduct(id) {
-        let array = [...this.state.products]; // make a separate copy of the array
-        let index = _.findIndex(array, {'id': id});
-        array[index].edit = false;
-        this.setState({products: array});
-    }
-
-    removeProduct(id) {
-
-        this.props.deleteProduct(id);
-        // let array = [...this.state.products]; // make a separate copy of the array
-        // array = array.filter((pro) => pro.id !== id);
-        // // let index = _.findIndex(array, {'id': id});
-        // // array.splice(index, 1);
-        // this.setState({products: array});
-    }
 }
 
 const mapStateToProps = (state) => ({
-    products: state.productReducer.products,
+    products: state.productReducer
 });
-
 
 const mapDispatchToProps = dispatch => (
     bindActionCreators(actions, dispatch)

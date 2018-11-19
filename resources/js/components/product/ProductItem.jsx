@@ -15,21 +15,18 @@ export default class ProductItem extends Component {
                 <td className={"text-right"}>{this.state.price}</td>
                 <td className={"text-right"}>{this.state.quantity}</td>
                 <td>
-                    <a href="" className="btn-link text-primary" onClick={::this.editProduct}>Edit</a>&nbsp;&nbsp;
-                    <a href="" className="btn-link text-danger" onClick={::this.removeProduct}>Remove</a>
+                    <button className="btn btn-link text-primary" onClick={::this.editProduct}>Edit</button>&nbsp;&nbsp;
+                    <button className="btn btn-link text-danger" onClick={::this.removeProduct}>Remove</button>
                 </td>
             </tr>
         )
     }
 
-    editProduct(e) {
-        e.preventDefault();
-        this.props.dispatch({ type: 'EDIT', id: this.state.id });
-        // this.props.editProductParent(this.state.id);
+    editProduct() {
+        this.props.dispatch.editProduct(this.state.id);
     }
 
-    removeProduct(e) {
-        e.preventDefault();
-        this.props.removeProduct(this.state.id);
+    removeProduct() {
+        this.props.dispatch.deleteProduct(this.state.id);
     }
 }

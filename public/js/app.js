@@ -15126,22 +15126,7 @@ function verifyPlainObject(value, displayName, methodName) {
 }
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var ADD_PRODUCT = exports.ADD_PRODUCT = 'ADD_PRODUCT';
-var DELETE_PRODUCT = exports.DELETE_PRODUCT = 'DELETE_PRODUCT';
-var EDIT_PRODUCT = exports.EDIT_PRODUCT = 'EDIT_PRODUCT';
-var UPDATE_PRODUCT = exports.UPDATE_PRODUCT = 'UPDATE_PRODUCT';
-var LISTING_PRODUCT = exports.LISTING_PRODUCT = 'LISTING_PRODUCT';
-
-/***/ }),
+/* 25 */,
 /* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -37479,8 +37464,6 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -37511,8 +37494,6 @@ var Example = function (_Component) {
             products: [],
             loading: true
         };
-        _this.handleFormSubmit = _this.handleFormSubmit.bind(_this);
-        _this.removeProduct = _this.removeProduct.bind(_this);
         return _this;
     }
 
@@ -37549,7 +37530,7 @@ var Example = function (_Component) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'card-body' },
-                                _react2.default.createElement(_AddProduct2.default, { handleSubmit: this.handleFormSubmit }),
+                                _react2.default.createElement(_AddProduct2.default, { dispatch: this.props }),
                                 _react2.default.createElement('hr', null),
                                 _react2.default.createElement(
                                     'div',
@@ -37599,8 +37580,8 @@ var Example = function (_Component) {
                                             'tbody',
                                             null,
                                             this.props.products.map(function (product) {
-                                                if (product.edit) return _react2.default.createElement(_EditProduct2.default, { key: product.id, product: product, saveProduct: _this2.saveProduct.bind(_this2), cancelProduct: _this2.cancelProduct.bind(_this2) });
-                                                return _react2.default.createElement(_ProductItem2.default, { key: product.id, product: product, removeProduct: _this2.removeProduct.bind(_this2), editProductParent: _this2.editProductView.bind(_this2) });
+                                                if (product.edit) return _react2.default.createElement(_EditProduct2.default, { key: product.id, product: product, dispatch: _this2.props });
+                                                return _react2.default.createElement(_ProductItem2.default, { key: product.id, product: product, dispatch: _this2.props });
                                             })
                                         ),
                                         _react2.default.createElement(
@@ -37659,7 +37640,7 @@ var Example = function (_Component) {
                     last_page: response.data.last_page
                     // products: response.data.data
                 });
-                _this3.props.listingProduct({ products: response.data.data });
+                _this3.props.listingProduct(response.data.data);
             }).catch(function (error) {
                 // handle error
                 console.log(error);
@@ -37670,50 +37651,6 @@ var Example = function (_Component) {
                 });
             });
         }
-    }, {
-        key: 'handleFormSubmit',
-        value: function handleFormSubmit(newProduct) {
-            this.setState(function (state) {
-                return {
-                    products: [].concat(_toConsumableArray(state.products), [newProduct])
-                };
-            });
-        }
-    }, {
-        key: 'editProductView',
-        value: function editProductView(id) {
-            var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
-            var index = _.findIndex(array, { 'id': id });
-            array[index].edit = true;
-            this.setState({ products: array });
-        }
-    }, {
-        key: 'saveProduct',
-        value: function saveProduct(updatedProduct) {
-            var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
-            var index = _.findIndex(array, { 'id': id });
-            array[index] = updatedProduct;
-            this.setState({ products: array });
-        }
-    }, {
-        key: 'cancelProduct',
-        value: function cancelProduct(id) {
-            var array = [].concat(_toConsumableArray(this.state.products)); // make a separate copy of the array
-            var index = _.findIndex(array, { 'id': id });
-            array[index].edit = false;
-            this.setState({ products: array });
-        }
-    }, {
-        key: 'removeProduct',
-        value: function removeProduct(id) {
-
-            this.props.deleteProduct(id);
-            // let array = [...this.state.products]; // make a separate copy of the array
-            // array = array.filter((pro) => pro.id !== id);
-            // // let index = _.findIndex(array, {'id': id});
-            // // array.splice(index, 1);
-            // this.setState({products: array});
-        }
     }]);
 
     return Example;
@@ -37721,7 +37658,7 @@ var Example = function (_Component) {
 
 var mapStateToProps = function mapStateToProps(state) {
     return {
-        products: state.productReducer.products
+        products: state.productReducer
     };
 };
 
@@ -60635,23 +60572,29 @@ var AddProduct = function (_Component) {
     }, {
         key: 'onSubmit',
         value: function onSubmit(e) {
+            var _this2 = this;
+
             e.preventDefault();
-            this.props.handleSubmit(this.state);
             this.setState({
-                name: '',
-                price: '',
-                quantity: ''
+                id: Math.floor(Math.random() * 100 + 1) //a random number between 1 and 100
+            }, function () {
+                _this2.props.dispatch.addProduct(_this2.state);
+                _this2.setState({
+                    name: '',
+                    price: '',
+                    quantity: ''
+                });
             });
         }
     }, {
         key: 'render',
         value: function render() {
-            var _this2 = this;
+            var _this3 = this;
 
             return _react2.default.createElement(
                 'form',
                 { onSubmit: function onSubmit(e) {
-                        return _this2.onSubmit(e);
+                        return _this3.onSubmit(e);
                     } },
                 _react2.default.createElement(
                     'div',
@@ -60772,14 +60715,14 @@ var ProductItem = function (_Component) {
                     "td",
                     null,
                     _react2.default.createElement(
-                        "a",
-                        { href: "", className: "btn-link text-primary", onClick: this.editProduct.bind(this) },
+                        "button",
+                        { className: "btn btn-link text-primary", onClick: this.editProduct.bind(this) },
                         "Edit"
                     ),
                     "\xA0\xA0",
                     _react2.default.createElement(
-                        "a",
-                        { href: "", className: "btn-link text-danger", onClick: this.removeProduct.bind(this) },
+                        "button",
+                        { className: "btn btn-link text-danger", onClick: this.removeProduct.bind(this) },
                         "Remove"
                     )
                 )
@@ -60787,16 +60730,13 @@ var ProductItem = function (_Component) {
         }
     }, {
         key: "editProduct",
-        value: function editProduct(e) {
-            e.preventDefault();
-            this.props.dispatch({ type: 'EDIT', id: this.state.id });
-            // this.props.editProductParent(this.state.id);
+        value: function editProduct() {
+            this.props.dispatch.editProduct(this.state.id);
         }
     }, {
         key: "removeProduct",
-        value: function removeProduct(e) {
-            e.preventDefault();
-            this.props.removeProduct(this.state.id);
+        value: function removeProduct() {
+            this.props.dispatch.deleteProduct(this.state.id);
         }
     }]);
 
@@ -60869,12 +60809,12 @@ var EditProduct = function (_Component) {
                 _react2.default.createElement(
                     "td",
                     null,
-                    _react2.default.createElement("input", { type: "text", name: "name", className: "form-control", value: this.state.price, onChange: this.handleFieldChange.bind(this) })
+                    _react2.default.createElement("input", { type: "text", name: "price", className: "form-control", value: this.state.price, onChange: this.handleFieldChange.bind(this) })
                 ),
                 _react2.default.createElement(
                     "td",
                     null,
-                    _react2.default.createElement("input", { type: "text", name: "name", className: "form-control", value: this.state.quantity, onChange: this.handleFieldChange.bind(this) })
+                    _react2.default.createElement("input", { type: "text", name: "quantity", className: "form-control", value: this.state.quantity, onChange: this.handleFieldChange.bind(this) })
                 ),
                 _react2.default.createElement(
                     "td",
@@ -60896,20 +60836,14 @@ var EditProduct = function (_Component) {
     }, {
         key: "saveProduct",
         value: function saveProduct(e) {
-            var _this2 = this;
-
             e.preventDefault();
-            this.setState({
-                edit: false
-            }, function () {
-                _this2.props.saveProduct(_this2.state);
-            });
+            this.props.dispatch.updateProduct(this.state);
         }
     }, {
         key: "cancelProduct",
         value: function cancelProduct(e) {
             e.preventDefault();
-            this.props.cancelProduct(this.state.id);
+            this.props.dispatch.cancelProduct(this.state.id);
         }
     }]);
 
@@ -62003,49 +61937,51 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _ActionTypes = __webpack_require__(25);
+var _actionTypes = __webpack_require__(96);
 
-var types = _interopRequireWildcard(_ActionTypes);
+var types = _interopRequireWildcard(_actionTypes);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var initProducts = {
-    products: []
-};
-
 var productReducer = function productReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initProducts;
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
     var _ref = arguments[1];
     var type = _ref.type,
         payload = _ref.payload;
 
     switch (type) {
         case types.ADD_PRODUCT:
-            return [].concat(_toConsumableArray(state), [payload]);
+            {
+                console.log(payload);
+                return [].concat(_toConsumableArray(state), [payload]);
+            }
         case types.DELETE_PRODUCT:
-            return _extends({}, state, { products: state.products.filter(function (obj) {
-                    return obj.id !== payload;
-                }) });
+            return state.filter(function (obj) {
+                return obj.id !== payload;
+            });
         case types.EDIT_PRODUCT:
-            return state.products.map(function (obj) {
-                return obj.id === payload ? _extends({}, obj, { edit: !obj.edit }) : obj;
+            return state.map(function (obj) {
+                return obj.id === payload ? _extends({}, obj, { edit: true }) : obj;
+            });
+        case types.CANCEL_PRODUCT:
+            return state.map(function (obj) {
+                return obj.id === payload ? _extends({}, obj, { edit: false }) : obj;
             });
         case types.UPDATE_PRODUCT:
-            return state.products.map(function (obj) {
+            return state.map(function (obj) {
                 if (obj.id === payload.id) {
                     obj.name = payload.name;
                     obj.price = payload.price;
-                    obj.quantity = !payload.quantity;
+                    obj.quantity = payload.quantity;
+                    obj.edit = false;
                     return obj;
                 }
                 return obj;
             });
         case types.LISTING_PRODUCT:
-            {
-                return Object.assign({}, payload);
-            }
+            return payload;
 
         default:
             return state;
@@ -62064,11 +62000,11 @@ exports.default = productReducer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.listingProduct = exports.updateProduct = exports.editProduct = exports.deleteProduct = exports.addProduct = undefined;
+exports.listingProduct = exports.updateProduct = exports.cancelProduct = exports.editProduct = exports.deleteProduct = exports.addProduct = undefined;
 
-var _ActionTypes = __webpack_require__(25);
+var _actionTypes = __webpack_require__(96);
 
-var types = _interopRequireWildcard(_ActionTypes);
+var types = _interopRequireWildcard(_actionTypes);
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -62080,6 +62016,9 @@ var deleteProduct = exports.deleteProduct = function deleteProduct(payload) {
 };
 var editProduct = exports.editProduct = function editProduct(payload) {
   return { type: types.EDIT_PRODUCT, payload: payload };
+};
+var cancelProduct = exports.cancelProduct = function cancelProduct(payload) {
+  return { type: types.CANCEL_PRODUCT, payload: payload };
 };
 var updateProduct = exports.updateProduct = function updateProduct(payload) {
   return { type: types.UPDATE_PRODUCT, payload: payload };
@@ -62145,6 +62084,23 @@ var _products2 = _interopRequireDefault(_products);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({ productReducer: _products2.default });
+
+/***/ }),
+/* 96 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ADD_PRODUCT = exports.ADD_PRODUCT = 'ADD_PRODUCT';
+var DELETE_PRODUCT = exports.DELETE_PRODUCT = 'DELETE_PRODUCT';
+var EDIT_PRODUCT = exports.EDIT_PRODUCT = 'EDIT_PRODUCT';
+var CANCEL_PRODUCT = exports.CANCEL_PRODUCT = 'CANCEL_PRODUCT';
+var UPDATE_PRODUCT = exports.UPDATE_PRODUCT = 'UPDATE_PRODUCT';
+var LISTING_PRODUCT = exports.LISTING_PRODUCT = 'LISTING_PRODUCT';
 
 /***/ })
 /******/ ]);

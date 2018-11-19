@@ -20,11 +20,15 @@ export default class AddProduct extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.props.handleSubmit(this.state);
         this.setState({
-            name: '',
-            price: '',
-            quantity: ''
+            id: Math.floor((Math.random() * 100) + 1) //a random number between 1 and 100
+        }, () => {
+            this.props.dispatch.addProduct(this.state);
+            this.setState({
+                name: '',
+                price: '',
+                quantity: ''
+            });
         });
     }
 

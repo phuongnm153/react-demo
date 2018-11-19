@@ -18,8 +18,8 @@ export default class EditProduct extends Component {
             <tr>
                 <td>{this.state.id}</td>
                 <td><input type="text" name="name" className="form-control" value={this.state.name} onChange={::this.handleFieldChange}/></td>
-                <td><input type="text" name="name" className="form-control" value={this.state.price} onChange={::this.handleFieldChange}/></td>
-                <td><input type="text" name="name" className="form-control" value={this.state.quantity} onChange={::this.handleFieldChange}/></td>
+                <td><input type="text" name="price" className="form-control" value={this.state.price} onChange={::this.handleFieldChange}/></td>
+                <td><input type="text" name="quantity" className="form-control" value={this.state.quantity} onChange={::this.handleFieldChange}/></td>
                 <td>
                     <a href="" className="btn btn-primary" onClick={::this.saveProduct}>Save</a>&nbsp;&nbsp;
                     <a href="" className="btn btn-danger" onClick={::this.cancelProduct}>Cancel</a>
@@ -30,15 +30,11 @@ export default class EditProduct extends Component {
 
     saveProduct(e) {
         e.preventDefault();
-        this.setState({
-            edit: false
-        }, () => {
-            this.props.saveProduct(this.state);
-        });
+        this.props.dispatch.updateProduct(this.state);
     }
 
     cancelProduct(e) {
         e.preventDefault();
-        this.props.cancelProduct(this.state.id);
+        this.props.dispatch.cancelProduct(this.state.id);
     }
 }

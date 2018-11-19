@@ -16,7 +16,7 @@ class ProductController extends Controller
     public function index()
     {
         //
-        $data = Product::select('id', 'name', 'price', 'quantity')->paginate(10);
+        $data = Product::select('id', 'name', 'price', 'quantity')->orderBy('price')->paginate(10);
         return response($data);
     }
 

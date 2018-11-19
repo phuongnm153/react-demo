@@ -1,31 +1,31 @@
-import * as types from '../actions/ActionTypes'
+import * as types from '../actions/actionTypes'
 
-const initProducts = {
-    products : []
-};
-
-const productReducer = (state = initProducts,  { type, payload }) => {
+const productReducer = (state = [],  { type, payload }) => {
     switch (type) {
         case types.ADD_PRODUCT:
+        {
+            console.log(payload);
             return [...state, payload];
+        }
         case types.DELETE_PRODUCT:
-            return {...state, products: state.products.filter((obj) => obj.id !== payload)};
+            return state.filter((obj) => obj.id !== payload);
         case types.EDIT_PRODUCT:
-            return state.products.map((obj) => obj.id === payload ? { ...obj, edit: !obj.edit } : obj);
+            return state.map((obj) => obj.id === payload ? { ...obj, edit: true } : obj);
+        case types.CANCEL_PRODUCT:
+            return state.map((obj) => obj.id === payload ? { ...obj, edit: false } : obj);
         case types.UPDATE_PRODUCT:
-            return state.products.map((obj) => {
+            return state.map((obj) => {
                 if (obj.id === payload.id) {
                     obj.name = payload.name;
                     obj.price = payload.price;
-                    obj.quantity = !payload.quantity;
+                    obj.quantity = payload.quantity;
+                    obj.edit = false;
                     return obj;
                 }
                 return obj;
             });
         case types.LISTING_PRODUCT:
-        {
-            return Object.assign({}, payload);
-        }
+            return payload;
 
         default:
             return state
