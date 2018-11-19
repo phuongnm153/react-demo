@@ -9,7 +9,6 @@ export default class AddProduct extends Component {
             quantity: ''
         };
         this.handleChange = this.handleChange.bind(this);
-        // this.onSubmit = this.onSubmit.bind(this);
     }
 
     handleChange (event) {
@@ -34,7 +33,7 @@ export default class AddProduct extends Component {
 
     render() {
         return (
-            <form onSubmit={e => this.onSubmit(e)}>
+            <form onSubmit={::this.onSubmit}>
                 <div className="form-row align-items-center">
                     <div className="col-auto">
                         <label className="sr-only" htmlFor="inlineFormInput">Name</label>
