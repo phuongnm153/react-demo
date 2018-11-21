@@ -7,8 +7,8 @@ import ProductItem from './product/ProductItem';
 import EditProduct from './product/EditProduct';
 
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
 import * as actions from '../actions';
+import { bindActionCreators } from 'redux';
 
 class Example extends Component {
     constructor(props) {
