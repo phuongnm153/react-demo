@@ -134,6 +134,7 @@ class Example extends Component {
 }
 
 const mapStateToProps = (state) => ({
+    //this.props.products = store.productReducer
     products: state.productReducer
 });
 
