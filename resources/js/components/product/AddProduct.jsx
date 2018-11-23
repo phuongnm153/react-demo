@@ -19,16 +19,39 @@ export default class AddProduct extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        this.setState({
-            id: Math.floor((Math.random() * 100) + 1) //a random number between 1 and 100
-        }, () => {
-            this.props.dispatch.addProduct(this.state);
-            this.setState({
-                name: '',
-                price: '',
-                quantity: ''
+        axios.post(api_version + 'products', this.state)
+            .then(response => {
+                if (response.data.status) {
+                    this.setState({
+                        id: response.data.id
+                    }, () => {
+                        this.props.dispatch.addProduct(this.state);
+                        this.setState({
+                            name: '',
+                            price: '',
+                            quantity: '',
+                            error: ''
+                        });
+                    });
+                } else {
+                    this.setState({
+                        error : '<div className="alert alert-warning alert-dismissible fade show" role="alert">' +
+                            '                    <strong>Error!</strong> Có lỗi xảy ra.' +
+                            '                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">' +
+                            '                    <span aria-hidden="true">&times;</span>' +
+                            '                    </button>' +
+                            '                    </div>'
+                    })
+                }
+
+            })
+            .catch( error => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
             });
-        });
     }
 
     render() {
@@ -51,6 +74,7 @@ export default class AddProduct extends Component {
                         <button type="submit" className="btn btn-primary mb-2">Add</button>
                     </div>
                 </div>
+                {this.state.error}
             </form>
         )
     }

@@ -29,6 +29,28 @@ export default class ProductItem extends Component {
 
     removeProduct(e) {
         e.preventDefault();
-        this.props.dispatch.deleteProduct(this.state.id);
+        axios.delete(api_version + 'products/' + this.state.id)
+            .then(response => {
+                if (response.data.status) {
+                    this.props.dispatch.deleteProduct(this.state.id);
+                } else {
+                    this.setState({
+                        error : '<div className="alert alert-warning alert-dismissible fade show" role="alert">' +
+                            '                    <strong>Error!</strong> Có lỗi xảy ra.' +
+                            '                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">' +
+                            '                    <span aria-hidden="true">&times;</span>' +
+                            '                    </button>' +
+                            '                    </div>'
+                    })
+                }
+
+            })
+            .catch( error => {
+                // handle error
+                console.log(error);
+            })
+            .then(() => {
+                // always executed
+            });
     }
 }

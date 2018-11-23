@@ -38795,6 +38795,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -38863,6 +38865,37 @@ var Example = function (_Component) {
                                 { className: 'card-body' },
                                 _react2.default.createElement(_AddProduct2.default, { dispatch: this.props }),
                                 _react2.default.createElement('hr', null),
+                                _react2.default.createElement(
+                                    'div',
+                                    { className: 'form-group' },
+                                    _react2.default.createElement(
+                                        'form',
+                                        { onSubmit: this.handleSubmit.bind(this) },
+                                        _react2.default.createElement(
+                                            'div',
+                                            { className: 'form-row align-items-center' },
+                                            _react2.default.createElement(
+                                                'div',
+                                                { className: 'col-auto' },
+                                                _react2.default.createElement(
+                                                    'label',
+                                                    { className: 'sr-only', htmlFor: 'inlineFormInput' },
+                                                    'Search'
+                                                ),
+                                                _react2.default.createElement('input', { type: 'text', name: 'search', className: 'form-control mb-2', placeholder: 'Search', value: this.state.search, onChange: this.handleChange.bind(this) })
+                                            ),
+                                            _react2.default.createElement(
+                                                'div',
+                                                { className: 'col-auto' },
+                                                _react2.default.createElement(
+                                                    'button',
+                                                    { type: 'submit', className: 'btn btn-primary mb-2' },
+                                                    'Search'
+                                                )
+                                            )
+                                        )
+                                    )
+                                ),
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'table-responsive' },
@@ -38951,6 +38984,28 @@ var Example = function (_Component) {
                     )
                 )
             );
+        }
+    }, {
+        key: 'componentWillUpdate',
+        value: function componentWillUpdate(prevProps) {}
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate(prevProps) {
+            // Typical usage (don't forget to compare props):
+            if (!_.isEqual(this.props.products.sort(), prevProps.products.sort())) {
+                this.getProducts();
+            }
+        }
+    }, {
+        key: 'handleChange',
+        value: function handleChange(event) {
+            this.setState(_defineProperty({}, event.target.name, event.target.value));
+        }
+    }, {
+        key: 'handleSubmit',
+        value: function handleSubmit(e) {
+            e.preventDefault();
+            this.getProducts();
         }
     }, {
         key: 'getProducts',
@@ -39543,15 +39598,29 @@ var AddProduct = function (_Component) {
             var _this2 = this;
 
             e.preventDefault();
-            this.setState({
-                id: Math.floor(Math.random() * 100 + 1) //a random number between 1 and 100
-            }, function () {
-                _this2.props.dispatch.addProduct(_this2.state);
-                _this2.setState({
-                    name: '',
-                    price: '',
-                    quantity: ''
-                });
+            axios.post(api_version + 'products', this.state).then(function (response) {
+                if (response.data.status) {
+                    _this2.setState({
+                        id: response.data.id
+                    }, function () {
+                        _this2.props.dispatch.addProduct(_this2.state);
+                        _this2.setState({
+                            name: '',
+                            price: '',
+                            quantity: '',
+                            error: ''
+                        });
+                    });
+                } else {
+                    _this2.setState({
+                        error: '<div className="alert alert-warning alert-dismissible fade show" role="alert">' + '                    <strong>Error!</strong> Có lỗi xảy ra.' + '                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">' + '                    <span aria-hidden="true">&times;</span>' + '                    </button>' + '                    </div>'
+                    });
+                }
+            }).catch(function (error) {
+                // handle error
+                console.log(error);
+            }).then(function () {
+                // always executed
             });
         }
     }, {
@@ -39602,7 +39671,8 @@ var AddProduct = function (_Component) {
                             'Add'
                         )
                     )
-                )
+                ),
+                this.state.error
             );
         }
     }]);
@@ -39701,8 +39771,23 @@ var ProductItem = function (_Component) {
     }, {
         key: "removeProduct",
         value: function removeProduct(e) {
+            var _this2 = this;
+
             e.preventDefault();
-            this.props.dispatch.deleteProduct(this.state.id);
+            axios.delete(api_version + 'products/' + this.state.id).then(function (response) {
+                if (response.data.status) {
+                    _this2.props.dispatch.deleteProduct(_this2.state.id);
+                } else {
+                    _this2.setState({
+                        error: '<div className="alert alert-warning alert-dismissible fade show" role="alert">' + '                    <strong>Error!</strong> Có lỗi xảy ra.' + '                    <button type="button" className="close" data-dismiss="alert" aria-label="Close">' + '                    <span aria-hidden="true">&times;</span>' + '                    </button>' + '                    </div>'
+                    });
+                }
+            }).catch(function (error) {
+                // handle error
+                console.log(error);
+            }).then(function () {
+                // always executed
+            });
         }
     }]);
 

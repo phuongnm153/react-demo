@@ -42,6 +42,19 @@ class Example extends Component {
                             <div className="card-body">
                                 <AddProduct dispatch={this.props}/>
                                 <hr/>
+                                <div className="form-group">
+                                    <form onSubmit={::this.handleSubmit}>
+                                        <div className="form-row align-items-center">
+                                            <div className="col-auto">
+                                                <label className="sr-only" htmlFor="inlineFormInput">Search</label>
+                                                <input type="text" name="search" className="form-control mb-2" placeholder="Search" value={this.state.search} onChange={::this.handleChange}/>
+                                            </div>
+                                            <div className="col-auto">
+                                                <button type="submit" className="btn btn-primary mb-2">Search</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div className="table-responsive">
                                     <div className="table-processing" style={{display : this.state.loading ? 'block' : 'none'}}>Loading...</div>
                                     <table className="table">
@@ -94,6 +107,22 @@ class Example extends Component {
         );
     }
 
+    componentWillUpdate(prevProps) {
+    }
+
+    componentDidUpdate(prevProps) {
+        // Typical usage (don't forget to compare props):
+        if (!_.isEqual(this.props.products.sort(), prevProps.products.sort())) {
+            this.getProducts();
+        }
+    }
+
+    handleChange (event) {
+        this.setState({
+            [event.target.name]: event.target.value
+        })
+    }
+
     handlePageClick = (data) => {
         let selected = data.selected + 1;
 
@@ -101,6 +130,11 @@ class Example extends Component {
             this.getProducts()
         });
     };
+
+    handleSubmit(e) {
+        e.preventDefault();
+        this.getProducts();
+    }
 
     getProducts() {
         this.setState({
