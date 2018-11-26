@@ -39,7 +39,16 @@
             ]
         },
         "hooks": {
-            "pre-commit": "composer check-style"
+            "pre-commit": [
+                "echo committing as $(git config user.name)",
+                "php-cs-fixer fix ."
+            ],
+            "commit-msg": "grep -q '[A-Za-z]+-[0-9]+.*' $1",
+            "pre-push": [
+                "php-cs-fixer fix --dry-run .",
+                "phpunit"
+            ],
+            "post-merge": "composer update"
         }
     },
     "scripts": {
@@ -53,6 +62,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
+        "cghooks": "vendor/bin/cghooks",
         "check-style": "php-cs-fixer fix --using-cache=no --diff --dry-run .",
         "fix-style": "php-cs-fixer fix --using-cache=no ."
     },
