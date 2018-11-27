@@ -5,7 +5,7 @@ export default class ProductItem extends Component {
     constructor(props){
         super(props);
         this.state = this.props.product
-    )
+    );
 }
 
     render() {
