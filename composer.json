@@ -63,7 +63,7 @@
         "cghooks": "vendor/bin/cghooks",
         "post-install-cmd": "cghooks add --ignore-lock",
         "post-update-cmd": "cghooks update",
-        "check-lint": "php-cs-fixer fix -vvv ."
+        "check-lint": "php-cs-fixer fix -vvv --dry-run ."
     },
     "config": {
         "preferred-install": "dist",
