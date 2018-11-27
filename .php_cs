@@ -11,14 +11,5 @@ $finder = PhpCsFixer\Finder::create()
 ;
 
 return PhpCsFixer\Config::create()
-    ->setRules(array(
-        '@Symfony' => true,
-        'binary_operator_spaces' => ['align_double_arrow' => false],
-        'array_syntax' => ['syntax' => 'short'],
-        'linebreak_after_opening_tag' => true,
-        'not_operator_with_successor_space' => true,
-        'ordered_imports' => true,
-        'phpdoc_order' => true,
-    ))
     ->setFinder($finder)
 ;
