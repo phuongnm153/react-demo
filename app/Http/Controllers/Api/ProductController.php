@@ -24,7 +24,7 @@ class ProductController extends Controller
         if ($request->has('search')) {
             $data = $data->where('name', 'like', '%'.$request->get('search').'%');
         }
-        $data = $data->orderBy('price')->paginate(10);
+        $data = $data->orderBy('price')->paginate(10)
 
         return response($data);
     }
