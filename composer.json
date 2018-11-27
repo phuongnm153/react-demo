@@ -41,14 +41,8 @@
         "hooks": {
             "pre-commit": [
                 "echo committing as $(git config user.name)",
-                "php-cs-fixer fix ."
-            ],
-            "commit-msg": "grep -q '[A-Za-z]+-[0-9]+.*' $1",
-            "pre-push": [
-                "php-cs-fixer fix --dry-run .",
-                "phpunit"
-            ],
-            "post-merge": "composer update"
+                "composer check-lint"
+            ]
         }
     },
     "scripts": {
@@ -63,8 +57,9 @@
             "@php artisan package:discover"
         ],
         "cghooks": "vendor/bin/cghooks",
-        "check-style": "php-cs-fixer fix --using-cache=no --diff --dry-run .",
-        "fix-style": "php-cs-fixer fix --using-cache=no ."
+        "post-install-cmd": "vendor/bin/cghooks add --ignore-lock",
+        "post-update-cmd": "vendor/bin/cghooks update",
+        "check-lint": "php-cs-fixer fix --using-cache=no ."
     },
     "config": {
         "preferred-install": "dist",

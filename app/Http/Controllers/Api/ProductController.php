@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Product;
 use Illuminate\Http\Request;
+use App\Product;
 
 class ProductController extends Controller
 {
@@ -19,17 +19,10 @@ class ProductController extends Controller
     {
         //
         $data = Product::select('id', 'name', 'price', 'quantity');
-        if ($request->has('search'))
+        if ($request->has('search')) {
             $data = $data->where('name', 'like', '%'.$request->get('search').'%');
+        }
         $data = $data->orderBy('price')->paginate(10);
-
-
-
-
-
-
-
-
 
         return response($data);
     }
@@ -95,8 +88,9 @@ class ProductController extends Controller
         if ($product) {
             $product->fill($request->all());
             $result = $product->save();
+        } else {
+            $result = false;
         }
-        else $result = false;
         return response(['status' => $result]);
     }
 
@@ -111,8 +105,9 @@ class ProductController extends Controller
         $product = Product::find($id);
         if ($product) {
             $result = $product->delete();
+        } else {
+            $result = false;
         }
-        else $result = false;
         return response(['status' => $result]);
     }
 }
