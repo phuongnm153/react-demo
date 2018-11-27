@@ -7,6 +7,7 @@ export default class ProductItem extends Component {
         this.state = this.props.product
     )
 }
+
     render() {
         return (
             <tr>
