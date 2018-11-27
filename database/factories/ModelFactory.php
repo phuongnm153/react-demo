@@ -17,6 +17,6 @@ $factory->define(App\Product::class, function (Faker\Generator $faker) {
         'name' => $faker->unique()->name,
         'price' => $faker->numberBetween(1, 100) * 10000,
         'quantity' => $faker->randomDigit,
-        'status' => $faker->randomElement([0, 1])
+        'status' => $faker->randomElement([0, 1]),
     ];
 });
