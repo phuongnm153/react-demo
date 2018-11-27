@@ -42,6 +42,10 @@
             "pre-commit": [
                 "echo committing as $(git config user.name)",
                 "composer check-lint"
+            ],
+            "commit-msg": "grep -q 'web-[0-9]+:.*' $1",
+            "pre-push": [
+                "composer check-lint"
             ]
         }
     },
