@@ -5,11 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Product;
 use Illuminate\Http\Request;
-use
-
-
-    ;
-
 
 class ProductController extends Controller
 {
@@ -22,9 +17,9 @@ class ProductController extends Controller
     {
         $data = Product::select('id', 'name', 'price', 'quantity');
         if ($request->has('search')) {
-            $data = $data->where('name', 'like', '%'.$request->get('search').'%');
+            $data = $data->where('name', 'like', '%' . $request->get('search') . '%');
         }
-        $data = $data->orderBy('price')->paginate(10)
+        $data = $data->orderBy('price')->paginate(10);
 
         return response($data);
     }
@@ -80,7 +75,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int                      $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
