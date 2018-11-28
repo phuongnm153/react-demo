@@ -1,8 +1,9 @@
 {
     "private": true,
     "scripts": {
-        "test": "npm run lint && sass-lint && composer php-lint",
-        "lint": "eslint --fix resources/js/",
+        "test": "npm run eslint && npm run sass-lint && composer php-lint",
+        "eslint": "eslint --fix resources/js/",
+        "sass-lint": "sass-lint -c .sasslintrc -v",
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",

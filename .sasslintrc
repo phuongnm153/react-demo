@@ -1,9 +1,6 @@
 {
   "options": {
-    "merge-default-rules": false,
-    "formatter": "html",
-    "output-file": "linters/sass-lint.html",
-    "max-warnings": 50
+    "formatter": "stylish"
   },
   "files": {
     "include": "resources/sass/*.s+(a|c)ss",
@@ -28,18 +25,13 @@
     "no-debug": 1,
     "no-ids": 2,
     "no-important": 2,
-    "hex-notation": [
-      2,
-      {
-        "style": "uppercase"
-      }
-    ],
     "indentation": [
       2,
       {
         "size": 2
       }
     ],
+    "leading-zero": 0,
     "property-sort-order": [
       1,
       {
@@ -50,6 +42,8 @@
         "ignore-custom-properties": true
       }
     ],
+    "quotes": 0,
+    "trailing-semicolon": 0,
     "variable-for-property": [
       2,
       {
