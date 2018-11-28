@@ -11,7 +11,7 @@ module.exports = {
         ],
         'subject-empty': [2, 'never'],
         'subject-full-stop': [2, 'never', '.'],
-        'type-case': [2, 'always', ['lower-case', 'kebab-case']],
+        'type-case': [2, 'always', ['kebab-case']],
         'type-empty': [2, 'never']
     }
 };
