@@ -18,6 +18,7 @@
         "babel-preset-react": "^6.23.0",
         "babel-preset-stage-0": "^6.24.1",
         "bootstrap": "^4.0.0",
+        "commitlint": "^7.2.1",
         "cross-env": "^5.1",
         "eslint": "^5.9.0",
         "eslint-loader": "^2.1.1",
@@ -38,6 +39,7 @@
     },
     "husky": {
         "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
             "pre-commit": "npm test",
             "pre-push": "npm test"
         }

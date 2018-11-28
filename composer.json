@@ -38,16 +38,6 @@
         "laravel": {
             "dont-discover": [
             ]
-        },
-        "hooks": {
-            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-            "pre-commit": [
-                "echo committing as $(git config user.name)",
-                "composer check-lint"
-            ],
-            "pre-push": [
-                "composer check-lint"
-            ]
         }
     },
     "scripts": {
@@ -61,9 +51,6 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
-        "cghooks": "vendor/bin/cghooks",
-        "post-install-cmd": "cghooks add --ignore-lock",
-        "post-update-cmd": "cghooks update",
         "check-lint": "php-cs-fixer fix -vv --dry-run ."
     },
     "config": {
