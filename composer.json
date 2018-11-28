@@ -51,7 +51,7 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
         ],
-        "check-lint": "php-cs-fixer fix -vv --dry-run ."
+        "php-lint": "php-cs-fixer fix -vv --dry-run --using-cache=no ."
     },
     "config": {
         "preferred-install": "dist",
