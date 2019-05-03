@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         $data = Product::select('id', 'name', 'price', 'quantity');
         if ($request->has('search')) {
-            $data = $data->where('name', 'like', '%' . $request->get('search') . '%');
+            $data = $data->where('name', 'like', '%'.$request->get('search').'%');
         }
         $data = $data->orderBy('price')->paginate(10);
 
@@ -75,7 +75,7 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
