@@ -20,7 +20,7 @@
     </script>
 </head>
 <body>
-<div id="example"></div>
+<div id="app"></div>
 <!-- Scripts -->
 <script src="{{mix('/js/app.js')}}"></script>
 </body>

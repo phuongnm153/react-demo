@@ -3,9 +3,9 @@ import AppContext from '../context'
 import Child from './Child'
 
 export default class Me extends Component {
-  constructor() {
-    super()
-  }
+    constructor() {
+        super()
+    }
 
     createChildren = (numChild) => {
         let children = []
@@ -13,32 +13,34 @@ export default class Me extends Component {
         // Outer loop to create parent
         for (let i = 0; i < numChild; i++) {
             //Create the parent and add the children
-            children.push(<Child />)
+            children.push(<Child key={i}/>)
         }
         return children
     }
 
-  render() {
-    return (
-        <AppContext.Consumer>
-            {(context) => (
-                <Fragment>
-                    <div className="card" style="width: 18rem;">
-                        <svg className="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img"
-                             aria-label="Placeholder: Image cap"><title>Me</title>
-                            <rect width="100%" height="100%" fill="#868e96"/>
-                            <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Me</text>
-                        </svg>
-                        <div className="card-body">
-                            <p className="card-text">Tổng số con:
-                                {context.greatGrandchildren}
-                            </p>
-                        </div>
-                    </div>
-                    {this.createChildren(context.greatGrandchildren)}
-                </Fragment>
-            )}
-        </AppContext.Consumer>
-    )
-  }
+    render() {
+        return (
+            <AppContext.Consumer>
+                {(context) => (
+                    <ul>
+                        <li>
+                            <a href="#">Me
+                                <p className="card-text">Tổng số con:
+                                    {context.greatGrandchildren}
+                                </p>
+                            </a>
+                            <div>
+                                <button className={'btn btn-info'} onClick={() => context.countGGC(1)}>
+                                    +
+                                </button>
+                            </div>
+                            <ul>
+                            {this.createChildren(context.greatGrandchildren)}
+                            </ul>
+                        </li>
+                    </ul>
+                )}
+            </AppContext.Consumer>
+        )
+    }
 }

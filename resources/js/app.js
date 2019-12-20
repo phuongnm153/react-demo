@@ -16,12 +16,10 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import store from './store'
-import Example from './components/Example'
+import Genealogy from './genealogy/Index'
 
-if (document.getElementById('example')) {
-
+if (document.getElementById('app')) {
     ReactDOM.render(<Provider store={ store }>
-        <Example />
-    </Provider>, document.getElementById('example'));
-
+        <Genealogy />
+    </Provider>, document.getElementById('app'));
 }

@@ -10,8 +10,12 @@ export default class Index extends Component {
     render() {
         return (
             <AppProvider>
-                <div className="red">
-                    <Grandfather/>
+                <div className={'container mg-t-10'}>
+                    <div className="row tree card">
+                        <div className="card-body">
+                            <Grandfather/>
+                        </div>
+                    </div>
                 </div>
             </AppProvider>
         )

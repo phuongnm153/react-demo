@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import AppContext from '../context'
 export default class AppProvider extends Component {
     state = {
-        greatGrandchildren : 10,
+        greatGrandchildren : 2,
         countGGC: (num) => {
             this.setState({greatGrandchildren: this.state.greatGrandchildren + num})
         }
