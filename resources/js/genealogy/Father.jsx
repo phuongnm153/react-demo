@@ -11,7 +11,7 @@ export default class Father extends Component {
         return (
             <ul>
                 <li>
-                    <a href="#">Father
+                    <a href="#">Bố
                         <p className="card-text">Tổng số cháu:
                             <AppContext.Consumer>
                                 {(context) => context.greatGrandchildren}

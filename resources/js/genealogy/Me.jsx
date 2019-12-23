@@ -24,7 +24,7 @@ export default class Me extends Component {
                 {(context) => (
                     <ul>
                         <li>
-                            <a href="#">Me
+                            <a href="#">Tôi
                                 <p className="card-text">Tổng số con:
                                     {context.greatGrandchildren}
                                 </p>

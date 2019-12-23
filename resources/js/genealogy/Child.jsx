@@ -9,7 +9,7 @@ export default class Child extends Component {
   render() {
     return (
         <li>
-            <a href="#">Child</a>
+            <a href="#">Con</a>
         </li>
     )
   }

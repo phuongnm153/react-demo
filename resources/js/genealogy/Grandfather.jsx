@@ -12,7 +12,7 @@ export default class Grandfather extends Component {
             <div className="col-sm-6 text-center offset-sm-3">
                 <ul>
                     <li>
-                        <a href="#">Parent
+                        <a href="#">Ông
                             <p className="card-text">Tổng số chắt:
                                 <AppContext.Consumer>
                                     {(context) => context.greatGrandchildren}
